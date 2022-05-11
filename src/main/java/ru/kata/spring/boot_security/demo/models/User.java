@@ -1,58 +1,54 @@
 package ru.kata.spring.boot_security.demo.models;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table
-public class User {
+@Data
+@NoArgsConstructor
+public class User implements UserDetails {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
+
     @Column
-    private String name;
+    private String username;
+
     @Column
-    private String lastName;
-    @Column
-    private int age;
+    private String password;
 
-    public User() {
+    @ManyToMany (fetch = FetchType.EAGER)
+    private Collection <Role> roles;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles();
     }
 
-    public User(String name, String lastName, int age) {
-        this.name = name;
-        this.lastName = lastName;
-        this.age = age;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public int getId() {
-        return id;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
