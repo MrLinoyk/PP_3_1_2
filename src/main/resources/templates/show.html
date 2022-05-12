@@ -5,11 +5,23 @@
     <title>User</title>
 </head>
 <body>
-<p th:text="${user.id}"></p>
-<p th:text="${user.username}"></p>
-</div>
-<p><a th:href="@{user/updateUser/{id}(id=${user.id})}">Edit</a></p>
-<p><a href="/logout">Logout</a></p>
+<h2 align="center">Profile</h2>
+<table border="1" align="center">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Username</th>
+    </tr>
+    </thead>
+
+    <tr>
+        <td th:text="${user.id}">ID</td>
+        <td th:text="${user.username}">username</td>
+
+</table>
+<div>
+
+<p align="center"><a href="/logout">Logout</a></p>
 </div>
 </body>
 </html>

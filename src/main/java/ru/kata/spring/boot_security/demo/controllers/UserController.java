@@ -9,32 +9,26 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
-import ru.kata.spring.boot_security.demo.services.UserDetailsServiceImpl;
+import ru.kata.spring.boot_security.demo.services.UserService;
 
 @Controller
 public class UserController {
-    public final UserDetailsServiceImpl userDetailsService;
-    private final RoleService roleService;
+    public final UserService userServiceService;
+
 
     @Autowired
-    public UserController(UserDetailsServiceImpl userDetailsService, RoleService roleService) {
-        this.userDetailsService = userDetailsService;
-        this.roleService = roleService;
+    public UserController(UserService userServiceService) {
+        this.userServiceService = userServiceService;
     }
 
-    @GetMapping
+    @GetMapping ("/login")
+    public String loginPage () {
+        return "/login";
+    }
+
+    @GetMapping("/user")
     public String findUser (Model model) {
-        model.addAttribute("user" , userDetailsService.loadUserByUsername(userDetailsService.getCurrentUsername()));
+        model.addAttribute("user" , userServiceService.loadUserByUsername(userServiceService.getCurrentUsername()));
         return "show";
-    }
-    @GetMapping ("/updateUser/{id}")
-    public String updateUserForm (@PathVariable ("id") int id, Model model) {
-        model.addAttribute("user", userDetailsService.get(id));
-        return "updateUser";
-    }
-    @PostMapping ("/updateUser")
-    public String updateUser (@ModelAttribute ("user") User user) {
-        userDetailsService.updateUser(user);
-        return "redirect:/logout";
     }
 }
