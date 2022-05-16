@@ -19,10 +19,14 @@ import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
+    private final UserRepository userRepository;
+    private final RoleService roleService;
+
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private RoleService roleService;
+    public UserService(UserRepository userRepository, RoleService roleService) {
+        this.userRepository = userRepository;
+        this.roleService = roleService;
+    }
 
 
     @Override
