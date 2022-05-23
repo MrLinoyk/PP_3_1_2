@@ -4,7 +4,7 @@
 <title>Create user</title>
 </head>
 <body>
-<form action="#" th:action="@{/admin/update}" th:object="${update}" method="post">
+<form action="#" th:action="@{/admin/update}" th:object="${user}" method="post">
     <label for="id">Id</label>
     <input readonly type="number" th:field="*{id}" id="id" placeholder="Id">
     <br/>
@@ -20,7 +20,8 @@
                    th:each="role : ${allRole}"
                    th:text="${role.name}"
                    th:value="${role.id}"
-                   th:checked="${update.roles.contains(role)}"/>
+            />
+<!--                   th:checked="${update.roles.contains(role)}"/>-->
         </label>
     </p>
     <input type="submit" value="Update User">

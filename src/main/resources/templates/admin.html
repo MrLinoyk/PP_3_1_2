@@ -27,7 +27,16 @@
                 </tr>
             </table>
         </td>
-        <td><a th:href="@{admin/delete/{id}(id=${user.id})}">Delete</a></td>
+
+        <td>
+            <form action="#" th:action="@{admin/delete/{id}(id=${user.id})}" th:method="delete" >
+                <button type="submit" class="btn">
+                    Delete
+                </button>
+            </form>
+        </td>
+
+<!--        <td><a th:href="@{admin/delete/{id}(id=${user.id})}" th:method="delete">Delete</a></td>-->
         <td><a th:href="@{admin/update/{id}(id=${user.id})}">Edit</a></td>
     </tr>
     </tbody>

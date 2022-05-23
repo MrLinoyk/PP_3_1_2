@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table
@@ -25,7 +26,7 @@ public class User implements UserDetails {
     private String password;
 
     @ManyToMany (fetch = FetchType.EAGER)
-    private Collection <Role> roles;
+    private Set <Role> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
