@@ -21,7 +21,7 @@ import java.util.Set;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-    public final UserService userServiceServiceImpl;
+    private final UserService userServiceServiceImpl;
     private final RoleService roleServiceImpl;
 
     @Autowired
@@ -29,48 +29,31 @@ public class AdminController {
         this.userServiceServiceImpl = userServiceServiceImpl;
         this.roleServiceImpl = roleServiceImpl;
     }
-
     @GetMapping
     public String getAllUsers (Model model) {
         model.addAttribute("allUsers", userServiceServiceImpl.getAllUsers());
         return "/admin";
     }
-
     @DeleteMapping ("/delete/{id}")
     public String deleteUser (@PathVariable ("id") int id) {
         userServiceServiceImpl.deleteUser(id);
         return "redirect:/admin";
     }
-
-
     @GetMapping ("/update/{id}")
     public String updateUserForm (@PathVariable ("id") int id, ModelMap model) {
         User user = userServiceServiceImpl.getUserById(id);
-        Set<Role> roles = user.getRoles();
-        for (Role role: roles) {
-            if (role.equals(roleServiceImpl.getRoleByName("ROLE_ADMIN"))) {
-                model.addAttribute("roleAdmin", true);
-            }
-        }
         model.addAttribute("user", user);
         model.addAttribute("allRole", roleServiceImpl.allRoles());
 
         return "update";
     }
     @PostMapping ("/update")
-    public String updateUser (@ModelAttribute ("update") User user, @RequestParam ("roleList") String role) {
-        Set<Role> roles = new HashSet<>();
-        roles.add(roleServiceImpl.getRoleByName("ROLE_USER"));
-        if (role != null && role.equals("ROLE_ADMIN")) {
-            roles.add(roleServiceImpl.getRoleByName("ROLE_ADMIN"));
-        }
-        user.setRoles(roles);
+    public String updateUser (@ModelAttribute ("update") User user, @RequestParam ("roleList") List <String> role) {
+        Set <Role> roleSet = userServiceServiceImpl.getSetOfRoles(role);
+        user.setRoles(roleSet);
         userServiceServiceImpl.editUser(user);
         return "redirect:/admin";
     }
-
-
-
     @GetMapping ("/registration")
     public String registration (Model model) {
         User user = new User();
@@ -79,13 +62,9 @@ public class AdminController {
         return "registration";
     }
     @PostMapping ("/registration")
-    public String addUser (@ModelAttribute ("user") User user, @RequestParam ("role") String role) {
-        Set<Role> roles = new HashSet<>();
-        roles.add(roleServiceImpl.getRoleByName("ROLE_USER"));
-        if (role != null && role.equals("ROLE_ADMIN")) {
-            roles.add(roleServiceImpl.getRoleByName("ROLE_ADMIN"));
-        }
-        user.setRoles(roles);
+    public String addUser (@ModelAttribute ("user") User user, @RequestParam ("role") List <String> role) {
+        Set <Role> roleSet = userServiceServiceImpl.getSetOfRoles(role);
+        user.setRoles(roleSet);
         userServiceServiceImpl.addUser(user);
         return "redirect:/admin";
     }
